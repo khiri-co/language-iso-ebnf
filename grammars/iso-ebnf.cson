@@ -1,0 +1,238 @@
+'name': 'ISO-EBNF'
+'scopeName': 'source.iso-ebnf'
+'fileTypes': [
+  'isoebnf'
+]
+
+'repository': {
+  # Block comment
+  'block_comment': {
+    'comment': 'Block comment'
+    'name': 'comment.block.iso-ebnf'
+    'begin': '\\(\\*'
+    'end': '\\*\\)'
+    'patterns': [
+      { 'include': '#block_comment' }
+    ]
+  }
+  # Syntax rule
+  'syntax_rule': {
+    'begin': '\\b([a-zA-Z](?:\\s?[a-zA-Z0-9])*)\\b'
+    'beginCaptures': {
+      '1': { 'name': 'entity.name.type.iso-ebnf' }
+    }
+    'end': '(;|\\.)'
+    'endCaptures': {
+      '1': { 'name': 'punctuation.symbol.iso-ebnf' }
+    }
+    'patterns': [
+      {
+        'begin': '(=)'
+        'beginCaptures': {
+          '1': { 'name': 'keyword.operator.assignment.iso-ebnf' }
+        }
+        'end': '(?=;|\\.)'
+        'patterns': [
+          { 'include': '#definitions_list' }
+        ]
+      }
+      { 'include': '#block_comment' }
+    ]
+  }
+  # Operators
+  'operators': {
+    'match': '(\\||/|!|,|-)'
+    'name': 'keyword.operator.iso-ebnf'
+  }
+  # Definitions list
+  'definitions_list': {
+    'patterns': [
+      { 'include': '#syntactic_factor' }
+      { 'include': '#operators' }
+      { 'include': '#block_comment' }
+    ]
+  }
+  # Syntactic factor
+  'syntactic_factor': {
+    'patterns': [
+      {
+        'begin': '([0-9]+)'
+        'beginCaptures': {
+          '1': { 'name': 'constant.numeric.iso-ebnf' }
+        }
+        'end': '(\\*)'
+        'endCaptures': {
+            '1': { 'name': 'keyword.operator.iso-ebnf' }
+        }
+        'patterns': [
+          {
+            'match': '[^ \\t\\n\\v\\f]'
+            'name': 'invalid.illegal.iso-ebnf'
+          }
+        ]
+      }
+      { 'include': '#syntactic_primary' }
+    ]
+  }
+  # Syntactic primary
+  'syntactic_primary': {
+    'patterns': [
+      { 'include': '#invalid_sequences_of_characters' }
+      { 'include': '#invalid_end_symbols' }
+      { 'include': '#optional_sequence' }
+      { 'include': '#repeated_sequence' }
+      { 'include': '#grouped_sequence' }
+      { 'include': '#meta_identifier' }
+      { 'include': '#terminal_string' }
+      { 'include': '#special_sequence' }
+      { 'include': '#block_comment' }
+      { 'include': '#invalid_terminator_symbol' }
+      { 'include': '#invalid_defining_symbol' }
+    ]
+  }
+  # Optional sequence
+  'optional_sequence': {
+    'patterns': [
+      {
+        'comment': 'Optional sequence'
+        'begin': '(\\[)'
+        'beginCaptures': {
+          '1': { 'name': 'keyword.operator.iso-ebnf' }
+        }
+        'end': '(\\])'
+        'endCaptures': {
+          '1': { 'name': 'keyword.operator.iso-ebnf' }
+        }
+        'patterns': [
+          { 'include': '#definitions_list' }
+        ]
+      }
+      {
+        'comment': 'Optional sequence (Alternative)'
+        'begin': '(\\(/)'
+        'beginCaptures': {
+          '1': { 'name': 'keyword.operator.iso-ebnf' }
+        }
+        'end': '(/\\))'
+        'endCaptures': {
+          '1': { 'name': 'keyword.operator.iso-ebnf' }
+        }
+        'patterns': [
+          { 'include': '#definitions_list' }
+        ]
+      }
+    ]
+  }
+  # Repeated sequence
+  'repeated_sequence': {
+    'patterns': [
+      {
+        'comment': 'Repeated sequence'
+        'begin': '(\\{)'
+        'beginCaptures': {
+          '1': { 'name': 'keyword.operator.iso-ebnf' }
+        }
+        'end': '(\\})'
+        'endCaptures': {
+          '1': { 'name': 'keyword.operator.iso-ebnf' }
+        }
+        'patterns': [
+          { 'include': '#definitions_list' }
+        ]
+      }
+      {
+        'comment': 'Repeated sequence (Alternative)'
+        'begin': '(\\(:)'
+        'beginCaptures': {
+          '1': { 'name': 'keyword.operator.iso-ebnf' }
+        }
+        'end': '(:\\))'
+        'endCaptures': {
+          '1': { 'name': 'keyword.operator.iso-ebnf' }
+        }
+        'patterns': [
+          { 'include': '#definitions_list' }
+        ]
+      }
+    ]
+  }
+  # Grouped sequence
+  'grouped_sequence': {
+    'comment': 'Grouped sequence'
+    'begin': '(\\()(?!\\*|:|/)'
+    'beginCaptures': {
+      '1': { 'name': 'keyword.operator.iso-ebnf' }
+    }
+    'end': '(?<!\\*|:|/)(\\))'
+    'endCaptures': {
+      '1': { 'name': 'keyword.operator.iso-ebnf' }
+    }
+    'patterns': [
+      { 'include': '#definitions_list' }
+    ]
+  }
+  # Meta identifier
+  'meta_identifier': {
+    'comment': 'Meta identifier'
+    'name': 'variable.other.iso-ebnf'
+    'match': '\\b([a-zA-Z](\\s?[a-zA-Z0-9])*)\\b'
+  }
+  # Terminal string
+  'terminal_string' : {
+    'patterns': [
+      { 'include': '#first_quote_string' }
+      { 'include': '#second_quote_string' }
+    ]
+  }
+  'first_quote_string': {
+    'comment': 'First-quote string'
+    'name': 'string.quoted.single.iso-ebnf'
+    'begin': "’"
+    'end': "’"
+  }
+  'second_quote_string': {
+    'comment': 'Second-quote string'
+    'name': 'string.quoted.double.iso-ebnf'
+    'begin': '"'
+    'end': '"'
+  }
+  # Special sequence
+  'special_sequence': {
+    'comment': 'Special sequence'
+    'name': 'meta.string.other.iso-ebnf'
+    'begin': '\\?'
+    'end': '\\?'
+  }
+
+  # Invalids
+  'invalid_defining_symbol': {
+    'comment': 'Defining symbol (Invalid)'
+    'match': '='
+    'name': 'invalid.illegal.iso-ebnf'
+  }
+  'invalid_except_symbol': {
+    'comment': 'Except symbol (Invalid)'
+    'match': '\\-'
+    'name': 'invalid.illegal.iso-ebnf'
+  }
+  'invalid_terminator_symbol': {
+    'comment': 'Terminator symbol (Invalid)'
+    'match': ';|\\.'
+    'name': 'invalid.illegal.iso-ebnf'
+  }
+  'invalid_sequences_of_characters': {
+    'comment': 'Table 4 — Invalid sequences of characters'
+    'match': '\\([\\*:/]\\)'
+    'name': 'invalid.illegal.iso-ebnf'
+  }
+  'invalid_end_symbols': {
+    'comment': 'End symbols (Invalid)'
+    'match': '/\\)|:\\)|\\*\\)|\\)|\\]|\\}'
+    'name': 'invalid.illegal.iso-ebnf'
+  }
+}
+
+'patterns': [
+  { 'include': '#block_comment' }
+  { 'include': '#syntax_rule' }
+]

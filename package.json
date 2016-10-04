@@ -1,0 +1,24 @@
+{
+  "name": "language-iso-ebnf",
+  "main": "./lib/language-iso-ebnf",
+  "version": "0.0.0",
+  "description": "Syntax highlighting for ISO EBNF (ISO/IEC 14977:1996; Extended BNF) for Atom",
+  "keywords": [
+    "EBNF",
+    "ISO"
+  ],
+  "repository": "https://github.com/khiri-co/language-iso-ebnf",
+  "license": "MIT",
+  "engines": {
+    "atom": ">=1.0.0 <2.0.0"
+  },
+  "dependencies": {
+  },
+  "providedServices": {
+    "hyperclick.provider": {
+      "versions": {
+        "0.0.0": "getProvider"
+      }
+    }
+  }
+}

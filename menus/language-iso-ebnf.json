@@ -1,0 +1,26 @@
+{
+  "context-menu": {
+    "atom-text-editor": [
+      {
+        "label": "Toggle language-iso-ebnf",
+        "command": "language-iso-ebnf:toggle"
+      }
+    ]
+  },
+  "menu": [
+    {
+      "label": "Packages",
+      "submenu": [
+        {
+          "label": "language-iso-ebnf",
+          "submenu": [
+            {
+              "label": "Toggle",
+              "command": "language-iso-ebnf:toggle"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
